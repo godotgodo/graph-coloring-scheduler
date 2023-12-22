@@ -1,22 +1,23 @@
-const connectDB = require("../../../config/db");
-const GivenSubject = require("../../models/GivenSubject");
-const Subject = require("../../models/Subject");
+const givenSubjectController = require("@/app/controllers/GivenSubjectController");
 
 export async function GET() {
-  await connectDB();
-  const res = await GivenSubject.find().populate("subject");
-  return Response.json(res, { status: 200 });
+  const res = await givenSubjectController.getAll();
+  return res;
 }
 
 export async function POST(req) {
-  try {
-    await connectDB();
-    const body = await req.json();
-    const { lecturer } = await Subject.findById(body.subject);
-    body.lecturer = lecturer;
-    const res = await GivenSubject.create(body);
-    return Response.json(res, { status: 200 });
-  } catch (e) {
-    return Response.json(e, { status: 400 });
-  }
+  const res = await givenSubjectController.insert(await req.json());
+  return res;
+}
+
+export async function PUT(req) {
+  const { id, ...data } = await req.json();
+  const res = await givenSubjectController.update(id, data);
+  return res;
+}
+
+export async function DELETE(req) {
+  const { id } = await req.json();
+  const res = await givenSubjectController.delete(id);
+  return res;
 }

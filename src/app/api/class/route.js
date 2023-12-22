@@ -1,19 +1,23 @@
-const connectDB = require("../../../config/db");
-const Class = require("../../models/Class");
+import classController from "@/app/controllers/ClassController";
 
 export async function GET() {
-  await connectDB();
-  const res = await Class.find();
-  return Response.json(res, { status: 200 });
+  const res = await classController.getAll();
+  return res;
 }
 
 export async function POST(req) {
-  try {
-    await connectDB();
-    const body = await req.json();
-    const res = await Class.create(body);
-    return Response.json(res, { status: 200 });
-  } catch (e) {
-    Response.json(e, { status: 400 });
-  }
+  const res = await classController.insert(await req.json());
+  return res;
+}
+
+export async function PUT(req) {
+  const { id, ...data } = await req.json();
+  const res = await classController.update(id, data);
+  return res;
+}
+
+export async function DELETE(req) {
+  const { id } = await req.json();
+  const res = await classController.delete(id);
+  return res;
 }
