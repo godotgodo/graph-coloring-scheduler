@@ -1,5 +1,6 @@
 class Graf {
-  constructor() {
+  constructor(classes) {
+    this.classes = classes;
     this.dugumler = new Map();
   }
 
@@ -15,7 +16,7 @@ class Graf {
   }
 
   grafRenklendir() {
-    const renkler = ["kırmızı", "yeşil", "mavi", "sarı", "turuncu"];
+    const renkler = this.classes;
     const ziyaretEdilenDugumler = new Set();
 
     // Dereceleri yüksekten düşüğe sırala
