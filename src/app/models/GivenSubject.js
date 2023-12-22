@@ -34,9 +34,9 @@ const GivenSubjectSchema = new mongoose.Schema({
 });
 
 GivenSubjectSchema.pre('save', async function(next){
-    const subject = await Subject.findById(this.subject);  
-    this.lecturer = subject.lecturer;
-    next();
+        const subject = await Subject.findById(this.subject);  
+        this.lecturer = subject.lecturer;
+        next();
 })
 
 const GivenSubject = mongoose.models.GivenSubject || mongoose.model("GivenSubject", GivenSubjectSchema);
