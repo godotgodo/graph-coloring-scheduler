@@ -1,5 +1,4 @@
 import connectDB from "@/config/db";
-import { resolve } from "styled-jsx/css";
 
 class Service {
   constructor(model) {
