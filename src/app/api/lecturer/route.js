@@ -1,19 +1,23 @@
-const connectDB = require('../../../config/db');
-const Lecturer = require('../../models/Lecturer');
+import lecturerController from "@/app/controllers/LecturerController";
 
 export async function GET() {
-  await connectDB();
-  const res = await Lecturer.find();
-  return Response.json(res, {status:200});
+  const res = await lecturerController.getAll();
+  return res;
 }
 
-export async function POST(req){
-    try{
-      await connectDB()
-      const body = await req.json();
-      const res = await Lecturer.create(body);
-      return Response.json(res, {status:200});
-    }catch(e){
-      Response.json(e, {status: 400})
-    }
+export async function POST(req) {
+  const res = await lecturerController.insert(await req.json());
+  return res;
+}
+
+export async function PUT(req) {
+  const { id, ...data } = await req.json();
+  const res = await lecturerController.update(id, data);
+  return res;
+}
+
+export async function DELETE(req) {
+  const { id } = await req.json();
+  const res = await lecturerController.delete(id);
+  return res;
 }
