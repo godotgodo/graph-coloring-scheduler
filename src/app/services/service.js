@@ -5,10 +5,17 @@ class Service {
     this.model = model;
   }
 
-  async getAll() {
+  async getAll(populate) {
     try {
       await connectDB();
-      const res = await this.model.find();
+      let res;
+      if(populate)
+      {
+        res = await this.model.find().populate(populate);
+      }
+      else{
+        res = await this.model.find();
+      }
       return Response.json(res, { status: 200 });
     } catch (error) {
       return Response.json(error, { status: 400 });
