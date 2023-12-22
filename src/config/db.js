@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 
 const MONGO_URI = process.env.MONGO_URI
+//.env.local oluştuurlacak içine MONGO_URI=.... verilecek.
 
 const connectDB = async () => {
 
