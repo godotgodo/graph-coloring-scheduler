@@ -30,6 +30,12 @@ class Controller {
     const res = await this.service.delete(id);
     return res;
   }
+
+  async getById(id)
+  {
+    const res = await this.service.getById(id);
+    return res;
+  }
 }
 
 module.exports = Controller;
