@@ -14,6 +14,10 @@ const GivenSubjectSchema = new mongoose.Schema({
         type:"Number",
         enum:[9,10,11,12,13,14,15,16,17]
     },
+    day:{
+        type:"Number",
+        enum:[1,2,3,4,5],
+    },
     lecturer: {
         type: mongoose.Schema.ObjectId,
         ref: 'Lecturer',
@@ -30,9 +34,9 @@ const GivenSubjectSchema = new mongoose.Schema({
 });
 
 GivenSubjectSchema.pre('save', async function(next){
-    const subject = await Subject.findById(this.subject);  
-    this.lecturer = subject.lecturer;
-    next();
+        const subject = await Subject.findById(this.subject);  
+        this.lecturer = subject.lecturer;
+        next();
 })
 
 const GivenSubject = mongoose.models.GivenSubject || mongoose.model("GivenSubject", GivenSubjectSchema);

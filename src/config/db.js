@@ -2,9 +2,10 @@ const mongoose = require('mongoose');
 
 const MONGO_URI = process.env.MONGO_URI
 
-console.log("ÖNEMLİ ", MONGO_URI);
-
 const connectDB = async () => {
+
+    if(mongoose.connections[0].readyState) return;
+
     const conn = await mongoose.connect(MONGO_URI, {
         useNewUrlParser: true
     });
