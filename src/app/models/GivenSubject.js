@@ -27,6 +27,10 @@ const GivenSubjectSchema = new mongoose.Schema({
         type: mongoose.Schema.ObjectId,
         ref: 'Subject',
         required: [true, "Subject field is required."]
+    },
+    class: {
+        type: mongoose.Schema.ObjectId,
+        ref: 'Class'
     }
 }, {
     toJSON: { virtuals: true },
