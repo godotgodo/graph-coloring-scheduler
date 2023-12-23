@@ -35,7 +35,6 @@ const isSubjectUsed = (data = {}, givenSubjects = []) => {
   //   __v: 0,
   //   id: "6585745e5c2d80dfc6dad49d",
   // };
-  console.log("here we go");
   let smaller, bigger;
   let conflict = [];
   if(givenSubjects.length<=0)

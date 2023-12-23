@@ -20,19 +20,15 @@ class GivenSubjectService extends Service {
       else
       {
         const { lecturer } = await Subject.findById(data.subject);
-        console.log("1");
         data.lecturer = lecturer;
         const givenSubjectsByTheLecturer = await this.model.find({lecturer: data.lecturer});
         console.log(givenSubjectsByTheLecturer);
-        console.log("2");
         if(isSubjectUsed(data, givenSubjectsByTheLecturer))
         {
           console.log("5");
           return Response.json({message: "There is already a given class at this time."}, { status: 400 });
         }
-        console.log("3");
         const res = await this.model.create(data);
-        console.log("4");
         return Response.json(res, { status: 200 });
       }
     } catch (e) {
