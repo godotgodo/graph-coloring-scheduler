@@ -1,8 +1,42 @@
+import Class from "@/app/models/Class";
+
 class Graf {
-  constructor(classes) {
-    this.classes = classes;
+  constructor(res) {
+    this.res = res;
     this.dugumler = new Map();
+
+    this.res.forEach(givenSubject => {
+      this.dugumEkle(givenSubject.code);
+    });
+
+    this.res.forEach(givenSubject => {
+      this.res.forEach(otherGivenSubject => {
+        if (
+          givenSubject !== otherGivenSubject &&
+          this.zamanCakisiyor(givenSubject, otherGivenSubject)
+        ) {
+          this.kenarEkle(givenSubject.code, otherGivenSubject.code);
+        }
+      });
+    });
+
+    // Grafı renklendir
+    this.grafRenklendir();
+
   }
+
+  zamanCakisiyor(ders1, ders2) {
+    return (
+      ders1.day === ders2.day &&
+      (
+        (ders1.startTime >= ders2.startTime && ders1.startTime < ders2.endTime) ||
+        (ders1.endTime > ders2.startTime && ders1.endTime <= ders2.endTime)
+      )
+    );
+  }
+
+  //foreachla givensubject gez
+  //key için  diğer keyleri gez
 
   dugumEkle(etiket) {
     this.dugumler.set(etiket, { komsular: [], renk: null, derece: 0 });
@@ -16,7 +50,7 @@ class Graf {
   }
 
   grafRenklendir() {
-    const renkler = this.classes;
+    const renkler = [...new Set(Class.map(Class => Class.code))];
     const ziyaretEdilenDugumler = new Set();
 
     // Dereceleri yüksekten düşüğe sırala
@@ -59,11 +93,21 @@ class Graf {
     }
   }
 
-  renklendirilmisGrafiYazdir() {
-    for (const [dugum, veri] of this.dugumler) {
-      console.log(`${dugum} -> Renk: ${veri.renk}`);
+  renklendirilmisGrafiGetir() {
+    const dugumler = [...this.dugumler.entries()];
+    const renklendirilmisGraf = [];
+
+    for (const [dugum, veri] of dugumler) {
+      renklendirilmisGraf.push({
+        dugum,
+        renk: veri.renk,
+        data: veri.data,
+      });
     }
+
+    return renklendirilmisGraf;
   }
+
 }
 
 // // Örnek kullanım
