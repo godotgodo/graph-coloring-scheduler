@@ -1,17 +1,8 @@
 import GivenSubject from '@/app/models/GivenSubject';
-import  Graf from '@/utils/Graf';
 const givenSubjectController = require("@/app/controllers/GivenSubjectController");
 
 export async function GET() {
   const res = await givenSubjectController.getAll();
-  const graf=new Graf(res);
-  graf.renklendirilmisGrafiGetir().forEach(dugum => {
-    res.forEach(code => {
-      if(dugum===code){
-        res.class=dugum.renk;
-      }
-    });
-  });
   return res;
 }
 

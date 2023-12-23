@@ -1,12 +1,11 @@
-import Class from "@/app/models/Class";
-
 class Graf {
-  constructor(res) {
+  constructor(res, classes) {
     this.res = res;
+    this.classes = classes;
     this.dugumler = new Map();
 
     this.res.forEach(givenSubject => {
-      this.dugumEkle(givenSubject.code);
+      this.dugumEkle(givenSubject.id);
     });
 
     this.res.forEach(givenSubject => {
@@ -15,7 +14,7 @@ class Graf {
           givenSubject !== otherGivenSubject &&
           this.zamanCakisiyor(givenSubject, otherGivenSubject)
         ) {
-          this.kenarEkle(givenSubject.code, otherGivenSubject.code);
+          this.kenarEkle(givenSubject.id, otherGivenSubject.id);
         }
       });
     });
@@ -26,13 +25,33 @@ class Graf {
   }
 
   zamanCakisiyor(ders1, ders2) {
-    return (
+    let smaller;
+    let bigger;
+    if (ders1.day === ders2.day) {
+      if (ders1.startTime <= ders2.startTime) {
+        smaller = ders1;
+        bigger = ders2;
+      } else {
+        smaller = ders2;
+        bigger = ders1;
+      }
+
+      if( smaller.startTime <= bigger.startTime &&
+        smaller.endTime > bigger.startTime)
+        {
+          return true;
+        }
+      else{
+        return false;
+      }
+    }
+   /* return (
       ders1.day === ders2.day &&
       (
         (ders1.startTime >= ders2.startTime && ders1.startTime < ders2.endTime) ||
         (ders1.endTime > ders2.startTime && ders1.endTime <= ders2.endTime)
       )
-    );
+    );*/
   }
 
   //foreachla givensubject gez
@@ -43,14 +62,16 @@ class Graf {
   }
 
   kenarEkle(dugum1, dugum2) {
+   /* console.log(dugum1);
+    console.log(dugum2); */
     this.dugumler.get(dugum1).komsular.push(dugum2);
-    this.dugumler.get(dugum2).komsular.push(dugum1);
+   // this.dugumler.get(dugum2).komsular.push(dugum1);
     this.dugumler.get(dugum1).derece++;
-    this.dugumler.get(dugum2).derece++;
+   // this.dugumler.get(dugum2).derece++;
   }
 
   grafRenklendir() {
-    const renkler = [...new Set(Class.map(Class => Class.code))];
+    const renkler = [...new Set(this.classes.map(x => x.id))];
     const ziyaretEdilenDugumler = new Set();
 
     // Dereceleri yüksekten düşüğe sırala
