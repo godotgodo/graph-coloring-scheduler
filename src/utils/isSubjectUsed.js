@@ -35,9 +35,13 @@ const isSubjectUsed = (data = {}, givenSubjects = []) => {
   //   __v: 0,
   //   id: "6585745e5c2d80dfc6dad49d",
   // };
-
+  console.log("here we go");
   let smaller, bigger;
-  const conflict = [];
+  let conflict = [];
+  if(givenSubjects.length<=0)
+  {
+    return false;
+  }
   givenSubjects.forEach((givenSubject) => {
     if (givenSubject.day === data.day) {
       if (givenSubject.startTime <= data.startTime) {
@@ -53,7 +57,8 @@ const isSubjectUsed = (data = {}, givenSubjects = []) => {
         smaller.endTime > bigger.startTime
     );
   });
+ 
   return conflict.every((item) => item);
 };
 
-export default isSubjectUsed;
+export {isSubjectUsed};

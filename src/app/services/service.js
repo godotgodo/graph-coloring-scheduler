@@ -9,6 +9,7 @@ class Service {
     try {
       await connectDB();
       let res;
+      console.log(populate);
       if(populate)
       {
         res = await this.model.find().populate(populate);
