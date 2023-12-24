@@ -1,4 +1,8 @@
 import connectDB from "@/config/db";
+const Class = require("@/app/models/Class");
+const GivenSubject = require("@/app/models/GivenSubject");
+const Lecturer = require("@/app/models/Lecturer");
+const Subject = require("@/app/models/Subject");
 
 class Service {
   constructor(model) {
