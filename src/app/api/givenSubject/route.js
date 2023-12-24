@@ -1,3 +1,4 @@
+import GivenSubject from '@/app/models/GivenSubject';
 const givenSubjectController = require("@/app/controllers/GivenSubjectController");
 
 export async function GET() {

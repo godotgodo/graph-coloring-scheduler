@@ -2,9 +2,9 @@ class Controller {
   constructor(service) {
     this.service = service;
   }
-  async getAll() {
+  async getAll(populate) {
     try {
-      const res = await this.service.getAll();
+      const res = await this.service.getAll(populate);
       return res;
     } catch (error) {
       console.log(error);
@@ -28,6 +28,12 @@ class Controller {
   }
   async delete(id) {
     const res = await this.service.delete(id);
+    return res;
+  }
+
+  async getById(id)
+  {
+    const res = await this.service.getById(id);
     return res;
   }
 }

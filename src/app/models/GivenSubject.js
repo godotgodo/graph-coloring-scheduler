@@ -2,10 +2,10 @@ const mongoose = require('mongoose');
 const Subject = require('./Subject.js');
 
 const GivenSubjectSchema = new mongoose.Schema({
-    code:{
+   /* code:{
         type: "String",
         maxlength: [8, "Subject code cannot be more than 8 characters."]
-    },
+    },*/
     startTime: {
         type:"Number",
         enum:[9,10,11,12,13,14,15,16,17]
@@ -27,6 +27,10 @@ const GivenSubjectSchema = new mongoose.Schema({
         type: mongoose.Schema.ObjectId,
         ref: 'Subject',
         required: [true, "Subject field is required."]
+    },
+    class: {
+        type: mongoose.Schema.ObjectId,
+        ref: 'Class'
     }
 }, {
     toJSON: { virtuals: true },
