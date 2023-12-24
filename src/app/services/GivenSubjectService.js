@@ -66,25 +66,6 @@ class GivenSubjectService extends Service {
       return Response.json(e, { status: 400 });
     }
   }
-
-  async getAll(populate)
-  {
-    try {
-      await connectDB();
-      let res;
-      if(populate)
-      {
-        res = await this.model.find().populate(populate);
-      }
-      else{
-        res = await this.model.find();
-      }
-      return Response.json(res, { status: 200 });
-    } catch (error) {
-      return Response.json(error, { status: 400 });
-    }
-    
-  }
 }
 
 module.exports = GivenSubjectService;

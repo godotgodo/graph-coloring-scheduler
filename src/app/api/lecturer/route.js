@@ -1,7 +1,9 @@
 import lecturerController from "@/app/controllers/LecturerController";
 
 export async function GET() {
-  const res = await lecturerController.getAll(['givenSubjects', 'subjects']);
+  const res = await lecturerController.getAll({
+    populate: ["givenSubjects", "subjects"],
+  });
   return res;
 }
 

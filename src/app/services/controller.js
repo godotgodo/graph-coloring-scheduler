@@ -2,9 +2,9 @@ class Controller {
   constructor(service) {
     this.service = service;
   }
-  async getAll(populate) {
+  async getAll(filters) {
     try {
-      const res = await this.service.getAll(populate);
+      const res = await this.service.getAll(filters);
       return res;
     } catch (error) {
       console.log(error);
