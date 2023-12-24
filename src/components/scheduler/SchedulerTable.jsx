@@ -1,10 +1,9 @@
+"use client";
 import React from "react";
 import { Days, Times, Grades } from "@/utils/settings";
 import Image from "next/image";
 
-
-function SchedulerTable({data}) {
-  console.log(data);
+function SchedulerTable({ data }) {
   return (
     <div className="relative shadow-md sm:rounded-lg">
       <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
@@ -36,23 +35,51 @@ function SchedulerTable({data}) {
                     </td>
                     {Grades.map((grade) => (
                       <td className="group px-6 py-4" key={grade}>
-                        <div className="rounded-lg w-full h-16">
-                          <Image
-                            className="float-end cursor-pointer hidden group-hover:block"
-                            src={"/images/add.png"}
-                            width={32}
-                            height={32}
-                            alt="add"
-                          />
-                          {/* <Image src={"/images/delete.png"} width={32} height={32} alt="delete" /> */}
-
-                          {/* Gün: {Days[dayIndex]}
-                          <br />
-                          startTime - endTime: {Times[timeKey]} -{" "}
-                          {Times[timeIndex + 10]}
-                          <br />
-                          Grade: {grade} */
-                          }
+                        <div className="rounded-lg w-full">
+                          {data[grade][dayIndex + 1][timeKey] && (
+                            <div className="ps-3">
+                              <div className=" mr-1 text-base inline font-semibold">
+                                {
+                                  data[grade][dayIndex + 1][timeKey].subject
+                                    .name
+                                }
+                              </div>
+                              (
+                              <code className="font-mono font-bold">
+                                {
+                                  data[grade][dayIndex + 1][timeKey].subject
+                                    .code
+                                }
+                              </code>
+                              )
+                              <div className="font-normal text-gray-500">
+                                {` ${
+                                  data[grade][dayIndex + 1][timeKey].lecturer
+                                    .name
+                                } ${
+                                  data[grade][dayIndex + 1][timeKey].lecturer
+                                    .surname
+                                }`}
+                              </div>
+                            </div>
+                          )}
+                          {data[grade][dayIndex + 1][timeKey] ? (
+                            <Image
+                              src={"/images/delete.png"}
+                              className="float-end cursor-pointer"
+                              width={32}
+                              height={32}
+                              alt="delete"
+                            />
+                          ) : (
+                            <Image
+                              className="float-end cursor-pointer hidden group-hover:block"
+                              src={"/images/add.png"}
+                              width={32}
+                              height={32}
+                              alt="add"
+                            />
+                          )}
                         </div>
                       </td>
                     ))}

@@ -6,7 +6,34 @@ export async function getData() {
   if (!res.ok) {
     throw new Error("Failed fetch to data");
   }
-  return await res.json();
+  let timeTable = {};
+  const givenSubjects = await res.json();
+  for (let grade = 1; grade <= 4; grade++) {
+    timeTable[grade] = {};
+
+    for (let day = 1; day <= 5; day++) {
+      timeTable[grade][day] = {};
+
+      for (let hour = 9; hour <= 17; hour++) {
+        const matchingSubjects = givenSubjects.filter((givenSubject) => {
+          return (
+            givenSubject.startTime <= hour &&
+            givenSubject.endTime > hour &&
+            givenSubject.day === day &&
+            givenSubject.subject.grade === `${grade}`
+          );
+        });
+
+        if (matchingSubjects.length > 0) {
+          timeTable[grade][day][hour] = matchingSubjects[0];
+        } else {
+          timeTable[grade][day][hour] = null;
+        }
+      }
+    }
+  }
+
+  return timeTable;
 }
 
 export default async function Page() {
