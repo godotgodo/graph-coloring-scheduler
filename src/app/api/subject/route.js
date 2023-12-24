@@ -1,7 +1,7 @@
 import subjectController from "@/app/controllers/SubjectController";
 
 export async function GET() {
-  const res = await subjectController.getAll();
+  const res = await subjectController.getAll({ populate: ["lecturer"] });
   return res;
 }
 
