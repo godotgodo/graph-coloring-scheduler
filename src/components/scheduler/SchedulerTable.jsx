@@ -1,7 +1,10 @@
 import React from "react";
 import { Days, Times, Grades } from "@/utils/settings";
 import Image from "next/image";
-function SchedulerTable() {
+
+
+function SchedulerTable({data}) {
+  console.log(data);
   return (
     <div className="relative shadow-md sm:rounded-lg">
       <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
@@ -34,7 +37,13 @@ function SchedulerTable() {
                     {Grades.map((grade) => (
                       <td className="group px-6 py-4" key={grade}>
                         <div className="rounded-lg w-full h-16">
-                          <Image className="float-end cursor-pointer hidden group-hover:block" src={"/images/add.png"} width={32} height={32} alt="add" />
+                          <Image
+                            className="float-end cursor-pointer hidden group-hover:block"
+                            src={"/images/add.png"}
+                            width={32}
+                            height={32}
+                            alt="add"
+                          />
                           {/* <Image src={"/images/delete.png"} width={32} height={32} alt="delete" /> */}
 
                           {/* Gün: {Days[dayIndex]}
@@ -42,7 +51,8 @@ function SchedulerTable() {
                           startTime - endTime: {Times[timeKey]} -{" "}
                           {Times[timeIndex + 10]}
                           <br />
-                          Grade: {grade} */}
+                          Grade: {grade} */
+                          }
                         </div>
                       </td>
                     ))}
