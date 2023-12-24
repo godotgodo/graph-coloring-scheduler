@@ -5,7 +5,7 @@ class Service {
     this.model = model;
   }
 
-  async getAll({populate}) {
+  async getAll({ populate }) {
     try {
       await connectDB();
       let res;

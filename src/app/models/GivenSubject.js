@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const Subject = require('./Subject.js');
 
 const GivenSubjectSchema = new mongoose.Schema({
    /* code:{
@@ -36,12 +35,6 @@ const GivenSubjectSchema = new mongoose.Schema({
     toJSON: { virtuals: true },
     toObject: { virtuals: true }
 });
-
-GivenSubjectSchema.pre('save', async function(next){
-        const subject = await Subject.findById(this.subject);  
-        this.lecturer = subject.lecturer;
-        next();
-})
 
 const GivenSubject = mongoose.models.GivenSubject || mongoose.model("GivenSubject", GivenSubjectSchema);
 
