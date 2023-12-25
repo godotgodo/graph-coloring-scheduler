@@ -56,8 +56,8 @@ const isSubjectUsed = (data = {}, givenSubjects = []) => {
         smaller.endTime > bigger.startTime
     );
   });
- 
-  return conflict.every((item) => item);
+  console.log("conflict", conflict);
+  return conflict.some((item) => item);
 };
 
 export {isSubjectUsed};

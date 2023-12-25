@@ -47,9 +47,20 @@ class GivenSubjectService extends Service {
         const givenSubjectsByTheLecturer = await this.model.find({
           lecturer: data.lecturer,
         });
+        const targetSubject = await Subject.findById(data.subject);
+        const subjectsForGrades = await Subject.find({grade: targetSubject.grade});
+        const subjectIds = subjectsForGrades.map(subject => subject.id);
+        const givenSubjectByGrade = await this.model.find({subject: {$in: subjectIds}});
         if (isSubjectUsed(data, givenSubjectsByTheLecturer)) {
           return Response.json(
-            { message: "There is already a given class at this time." },
+            { message: "There is already a given class at this time by the lecturer." },
+            { status: 400 }
+          );
+        }
+        console.log("finalResult",isSubjectUsed(data, givenSubjectByGrade));
+        if(isSubjectUsed(data, givenSubjectByGrade)){
+          return Response.json(
+            { message: "There is already a given class for this grade." },
             { status: 400 }
           );
         }
