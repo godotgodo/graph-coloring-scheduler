@@ -57,7 +57,6 @@ class GivenSubjectService extends Service {
             { status: 400 }
           );
         }
-        console.log("finalResult",isSubjectUsed(data, givenSubjectByGrade));
         if(isSubjectUsed(data, givenSubjectByGrade)){
           return Response.json(
             { message: "There is already a given class for this grade." },
