@@ -5,7 +5,7 @@ import Image from "next/image";
 
 function SchedulerTable({ data }) {
   return (
-    <div className="relative shadow-md sm:rounded-lg">
+    <div className="relative w-full shadow-md sm:rounded-lg">
       <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
         <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
           <tr>
@@ -18,11 +18,11 @@ function SchedulerTable({ data }) {
           </tr>
         </thead>
         {Days.map((day, dayIndex) => (
-          <tbody key={day} className="relative">
-            <div>&nbsp;</div>
+          <tbody key={day} className="relative mb-5">
+            {/* <div>&nbsp;</div>
             <div className="absolute -left-20 top-1/2 -rotate-90 text-2xl">
               {day}
-            </div>
+            </div> */}
             {Object.keys(Times).map((timeKey, timeIndex) => {
               if (timeKey != 17) {
                 return (
