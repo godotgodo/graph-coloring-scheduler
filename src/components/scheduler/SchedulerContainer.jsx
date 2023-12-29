@@ -1,6 +1,6 @@
 import React from "react";
 import SchedulerTable from "./SchedulerTable";
-import SchedulerSettings from "./SchedulerSettings";
+import SchedulerSettings from "./Settings/SchedulerSettings";
 
 function SchedulerContainer({ data }) {
   return (

@@ -15,6 +15,9 @@ import {
 } from "@mui/material";
 import { TabContext, TabPanel } from "@mui/lab";
 import { useState, useEffect } from "react";
+import LecturerTab from "./LecturerTab";
+import SubjectTab from "./SubjectTab";
+import ClassTab from "./ClassTab";
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -51,30 +54,6 @@ export default function BasicModal() {
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
-  const [newLecturerName, setNewLecturerName] = useState("");
-  const [newLecturerSurname, setNewLecturerSurname] = useState("");
-  const [lecturers, setLecturers] = useState([]);
-  useEffect(() => {
-    fetchLecturers();
-  }, []);
-  const saveNewLecturer = async () => {
-    const newLecturer = {
-      name: newLecturerName,
-      surname: newLecturerSurname,
-    };
-    const res = await fetch("http://localhost:3000/api/lecturer", {
-      method: "POST",
-      body: JSON.stringify(newLecturer),
-    });
-    fetchLecturers();
-  };
-  const fetchLecturers = async () => {
-    const resLecturers = await fetch("http://localhost:3000/api/lecturer", {
-      cache: "no-cache",
-    });
-    const lecturers = await resLecturers.json();
-    setLecturers(lecturers);
-  };
   return (
     <div>
       <IconButton onClick={handleOpen}>
@@ -95,35 +74,14 @@ export default function BasicModal() {
                 <Tab value="class" label="Class" />
               </Tabs>
               <TabPanel value="lecturer">
-                <div className="flex flex-col gap-5">
-                  <TextField
-                    helperText="Please enter lecturer name"
-                    id="demo-helper-text-misaligned"
-                    label="Lecturer name"
-                    onChange={(e) => setNewLecturerName(e.target.value)}
-                  />
-                  <TextField
-                    helperText="Please enter lecturer surname"
-                    id="demo-helper-text-misaligned"
-                    label="Lecturer surname"
-                    onChange={(e) => setNewLecturerSurname(e.target.value)}
-                  />
-                  <Button variant="outlined" onClick={saveNewLecturer}>
-                    Save
-                  </Button>
-                </div>
-                <List>
-                  {lecturers.map((lecturer) => (
-                    <ListItem key={lecturer._id} disablePadding>
-                      <ListItemText
-                        primary={lecturer.name + " " + lecturer.surname}
-                      />
-                    </ListItem>
-                  ))}
-                </List>
+                <LecturerTab />
               </TabPanel>
-              <TabPanel value="subjects">Subjects</TabPanel>
-              <TabPanel value="class">Class</TabPanel>
+              <TabPanel value="subjects">
+                <SubjectTab />
+              </TabPanel>
+              <TabPanel value="class">
+                <ClassTab />
+              </TabPanel>
             </Box>
           </TabContext>
         </Box>
