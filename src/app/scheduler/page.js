@@ -2,7 +2,9 @@ import SchedulerContainer from "@/components/scheduler/SchedulerContainer";
 import React from "react";
 
 export async function getData() {
-  const res = await fetch("http://localhost:3000/api/givenSubject");
+  const res = await fetch("http://localhost:3000/api/givenSubject",{
+    cache:"reload"
+  });
   if (!res.ok) {
     throw new Error("Failed fetch to data");
   }
@@ -20,7 +22,7 @@ export async function getData() {
             givenSubject.startTime <= hour &&
             givenSubject.endTime > hour &&
             givenSubject.day === day &&
-            givenSubject.subject.grade === `${grade}`
+            givenSubject.subject?.grade === `${grade}`
           );
         });
 
