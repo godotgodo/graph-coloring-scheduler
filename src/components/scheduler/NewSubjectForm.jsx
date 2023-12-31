@@ -8,6 +8,7 @@ import {
   CardActions,
   MenuItem,
   Select,
+  Snackbar,
 } from "@mui/material";
 import { useState } from "react";
 import { useEffect } from "react";
@@ -20,24 +21,46 @@ export default function MultiActionAreaCard({
 }) {
   const [selectedSubject, setSelectedSubject] = useState({});
   const [subjects, setSubjects] = useState([]);
+  const [classes, setClasses] = useState([]);
+  const [selectedClass, setSelectedClass] = useState({});
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const handleOpen = (message) => {
+    setSnackbarMessage(message);
+    setOpenSnackbar(true);
+  };
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpenSnackbar(false);
+  };
 
   useEffect(() => {
     fetchSubjects();
-  }, []);
+    fetchClasses();
+  }, [grade]);
 
   const saveNewGivenSubject = async () => {
     const body = {
-      grade: grade,
       day: day,
       startTime: startTime,
       endTime: endTime,
       subject: selectedSubject._id,
+      class: selectedClass,
     };
     const res = await fetch("/api/givenSubject", {
       method: "POST",
       body: JSON.stringify(body),
     });
-    console.log(await res.json());
+    const result=await res.json();
+    if (result?.isAdded) {
+      handleOpen("Ders Eklendi, sayfayı yenileyin.");
+    }
+    else{
+      handleOpen(result.message)
+    }
   };
 
   const fetchSubjects = async () => {
@@ -45,7 +68,18 @@ export default function MultiActionAreaCard({
       cache: "no-cache",
     });
     const subjects = await resSubjects.json();
-    setSubjects(subjects);
+    if (grade !== 0) {
+      setSubjects(subjects.filter((subject) => subject.grade === grade));
+    } else {
+      setSubjects(subjects);
+    }
+  };
+  const fetchClasses = async () => {
+    const resClasses = await fetch("http://localhost:3000/api/class", {
+      cache: "no-cache",
+    });
+    const classes = await resClasses.json();
+    setClasses(classes);
   };
   return (
     <Card sx={{ maxWidth: 400 }}>
@@ -61,8 +95,8 @@ export default function MultiActionAreaCard({
             StartTime-EndTime:{startTime}-{endTime}
           </Typography>
           <Select
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
+            labelId="select-subject"
+            id="select-subject"
             value={selectedSubject._id}
             label="Subject"
             className="w-full"
@@ -83,6 +117,30 @@ export default function MultiActionAreaCard({
               </MenuItem>
             ))}
           </Select>
+          <Select
+            labelId="select-class"
+            id="select-class"
+            value={selectedClass._id}
+            label="Class"
+            placeholder="Select Class"
+            className="w-full mt-2"
+            onChange={(e) =>
+              setSelectedClass(
+                classes.find((item) => item._id === e.target.value)
+              )
+            }
+          >
+            {classes.map((_class) => (
+              <MenuItem
+                className="w-1/2"
+                key={_class._id}
+                value={_class._id}
+                disablePadding
+              >
+                {_class.code}
+              </MenuItem>
+            ))}
+          </Select>
         </CardContent>
       </CardActionArea>
       <CardActions>
@@ -90,6 +148,13 @@ export default function MultiActionAreaCard({
           Save
         </Button>
       </CardActions>
+      <Snackbar
+        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+        open={openSnackbar}
+        autoHideDuration={6000}
+        onClose={handleClose}
+        message={snackbarMessage}
+      />
     </Card>
   );
 }

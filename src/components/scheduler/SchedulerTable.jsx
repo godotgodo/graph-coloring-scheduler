@@ -2,19 +2,30 @@
 import React from "react";
 import { Days, Times, Grades } from "@/utils/settings";
 import Image from "next/image";
-import { Checkbox, MenuItem, Select } from "@mui/material";
+import { Checkbox, MenuItem, Select, Snackbar } from "@mui/material";
 import { useState } from "react";
 import { useEffect } from "react";
-import NewSubjectForm from './NewSubjectForm';
+import NewSubjectForm from "./NewSubjectForm";
+
 function SchedulerTable({ data }) {
   const [checkedIndexes, setCheckedIndexes] = useState([]);
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpenSnackbar(false);
+  };
+
   const [visibleCheckboxes, setVisibleCheckboxes] = useState([]);
   const [selectedTimes, setSelectedTimes] = useState({
     startTime: 0,
     endTime: 0,
   });
-  const [selectedGrade,setSelectedGrade]=useState(0);
-  const [selectedDay,setselectedDay]=useState(0);
+  const [selectedGrade, setSelectedGrade] = useState(0);
+  const [selectedDay, setselectedDay] = useState(0);
   useEffect(() => {
     if (checkedIndexes.length > 0) {
       setSelectedTimes({
@@ -22,8 +33,8 @@ function SchedulerTable({ data }) {
         endTime:
           Number(checkedIndexes[checkedIndexes.length - 1].split("-")[2]) + 1,
       });
-      setSelectedGrade(checkedIndexes[0].split("-")[0])
-      setselectedDay(checkedIndexes[0].split("-")[1])
+      setSelectedGrade(checkedIndexes[0].split("-")[0]);
+      setselectedDay(checkedIndexes[0].split("-")[1]);
       let visibleCheckboxes = [];
       for (let i = 1; i <= 9; i++) {
         visibleCheckboxes.push(`1-1-${i + 8}`);
@@ -36,6 +47,16 @@ function SchedulerTable({ data }) {
       });
     }
   }, [checkedIndexes]);
+  const deleteGivenSubject = async (id) => {
+    const body = {
+      id: id,
+    };
+    const res = await fetch("/api/givenSubject", {
+      method: "DELETE",
+      body: JSON.stringify(body),
+    });
+    setOpenSnackbar(true);
+  };
   return (
     <div className="relative w-full shadow-md sm:rounded-lg">
       <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
@@ -51,10 +72,6 @@ function SchedulerTable({ data }) {
         </thead>
         {Days.map((day, dayIndex) => (
           <tbody key={day} className="relative mb-5 border-b-8">
-            {/* <div>&nbsp;</div>
-            <div className="absolute -left-20 top-1/2 -rotate-90 text-2xl">
-              {day}
-            </div> */}
             {Object.keys(Times).map((timeKey, timeIndex) => {
               if (timeKey != 17) {
                 return (
@@ -107,7 +124,11 @@ function SchedulerTable({ data }) {
                                     .code
                                 }
                               </code>
-                              )
+                              ) [
+                              <code className="font-mono">
+                                {data[grade][dayIndex + 1][timeKey].class.code}
+                              </code>
+                              ]
                               <div className="font-normal text-gray-500">
                                 {` ${
                                   data[grade][dayIndex + 1][timeKey].lecturer
@@ -119,21 +140,18 @@ function SchedulerTable({ data }) {
                               </div>
                             </div>
                           )}
-                          {data[grade][dayIndex + 1][timeKey] ? (
+                          {data[grade][dayIndex + 1][timeKey] && (
                             <Image
                               src={"/images/delete.png"}
                               className="float-end cursor-pointer"
                               width={32}
                               height={32}
                               alt="delete"
-                            />
-                          ) : (
-                            <Image
-                              className="float-end cursor-pointer hidden group-hover:block"
-                              src={"/images/add.png"}
-                              width={32}
-                              height={32}
-                              alt="add"
+                              onClick={(e) =>
+                                deleteGivenSubject(
+                                  data[grade][dayIndex + 1][timeKey]._id
+                                )
+                              }
                             />
                           )}
                         </div>
@@ -147,8 +165,20 @@ function SchedulerTable({ data }) {
         ))}
       </table>
       <div className="absolute -right-56 top-60">
-        <NewSubjectForm startTime={selectedTimes.startTime} endTime={selectedTimes.endTime} grade={selectedGrade} day={selectedDay}/>
+        <NewSubjectForm
+          startTime={selectedTimes.startTime}
+          endTime={selectedTimes.endTime}
+          grade={selectedGrade}
+          day={selectedDay}
+        />
       </div>
+      <Snackbar
+        anchorOrigin={{vertical:'bottom',horizontal:'right'}}
+        open={openSnackbar}
+        autoHideDuration={6000}
+        onClose={handleClose}
+        message="Ders Silindi. Sayfayı yenileyin..."
+      />
     </div>
   );
 }

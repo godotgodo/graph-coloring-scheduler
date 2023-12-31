@@ -3,7 +3,7 @@ import React from "react";
 
 export async function getData() {
   const res = await fetch("http://localhost:3000/api/givenSubject",{
-    cache:"reload"
+    cache:"no-cache"
   });
   if (!res.ok) {
     throw new Error("Failed fetch to data");
