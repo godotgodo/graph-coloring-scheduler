@@ -74,8 +74,8 @@ function SchedulerTable({ data }) {
         </thead>
         {Days.map((day, dayIndex) => (
           <tbody key={day} className="relative mb-5 border-b-8">
-            <div className="absolute left">
-
+            <div className="absolute -left-20 top-1/2 -rotate-90 text-2xl">
+              {day}
             </div>
             {Object.keys(Times).map((timeKey, timeIndex) => {
               if (timeKey != 17) {
@@ -178,7 +178,7 @@ function SchedulerTable({ data }) {
         />
       </div>
       <Snackbar
-        anchorOrigin={{vertical:'bottom',horizontal:'right'}}
+        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
         open={openSnackbar}
         autoHideDuration={6000}
         onClose={handleClose}
