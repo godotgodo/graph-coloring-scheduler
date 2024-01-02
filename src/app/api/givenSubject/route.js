@@ -2,7 +2,7 @@ const givenSubjectController = require("@/app/controllers/GivenSubjectController
 
 export async function GET() {
   const res = await givenSubjectController.getAll({
-    populate: ["subject", "lecturer"],
+    populate: ["subject", "lecturer","class"],
   });
   return res;
 }

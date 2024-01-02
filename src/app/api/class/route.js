@@ -1,7 +1,7 @@
 import classController from "@/app/controllers/ClassController";
 
 export async function GET() {
-  const res = await classController.getAll();
+  const res = await classController.getAll({ populate: [] });
   return res;
 }
 

@@ -2,10 +2,63 @@
 import React from "react";
 import { Days, Times, Grades } from "@/utils/settings";
 import Image from "next/image";
+import { Checkbox, MenuItem, Select, Snackbar } from "@mui/material";
+import { useState } from "react";
+import { useEffect } from "react";
+import NewSubjectForm from "./NewSubjectForm";
 
 function SchedulerTable({ data }) {
+  const [checkedIndexes, setCheckedIndexes] = useState([]);
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpenSnackbar(false);
+  };
+
+  const [visibleCheckboxes, setVisibleCheckboxes] = useState([]);
+  const [selectedTimes, setSelectedTimes] = useState({
+    startTime: 0,
+    endTime: 0,
+  });
+  const [selectedGrade, setSelectedGrade] = useState(0);
+  const [selectedDay, setselectedDay] = useState(0);
+  useEffect(() => {
+    if (checkedIndexes.length > 0) {
+      setSelectedTimes({
+        startTime: Number(checkedIndexes[0].split("-")[2]),
+        endTime:
+          Number(checkedIndexes[checkedIndexes.length - 1].split("-")[2]) + 1,
+      });
+      setSelectedGrade(checkedIndexes[0].split("-")[0]);
+      setselectedDay(checkedIndexes[0].split("-")[1]);
+      let visibleCheckboxes = [];
+      for (let i = 1; i <= 9; i++) {
+        visibleCheckboxes.push(`1-1-${i + 8}`);
+      }
+      setVisibleCheckboxes(visibleCheckboxes);
+    } else {
+      setSelectedTimes({
+        startTime: 0,
+        endTime: 0,
+      });
+    }
+  }, [checkedIndexes]);
+  const deleteGivenSubject = async (id) => {
+    const body = {
+      id: id,
+    };
+    const res = await fetch("/api/givenSubject", {
+      method: "DELETE",
+      body: JSON.stringify(body),
+    });
+    setOpenSnackbar(true);
+  };
   return (
-    <div className="relative shadow-md sm:rounded-lg">
+    <div className="relative w-full shadow-md sm:rounded-lg">
       <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
         <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
           <tr>
@@ -18,11 +71,7 @@ function SchedulerTable({ data }) {
           </tr>
         </thead>
         {Days.map((day, dayIndex) => (
-          <tbody key={day} className="relative">
-            <div>&nbsp;</div>
-            <div className="absolute -left-20 top-1/2 -rotate-90 text-2xl">
-              {day}
-            </div>
+          <tbody key={day} className="relative mb-5 border-b-8">
             {Object.keys(Times).map((timeKey, timeIndex) => {
               if (timeKey != 17) {
                 return (
@@ -35,6 +84,30 @@ function SchedulerTable({ data }) {
                     </td>
                     {Grades.map((grade) => (
                       <td className="group px-6 py-4" key={grade}>
+                        <Checkbox
+                          onChange={(e) =>
+                            setCheckedIndexes((prev) => {
+                              if (
+                                e.target.checked &&
+                                !prev.includes(
+                                  `${grade}-${dayIndex + 1}-${timeKey}`
+                                )
+                              ) {
+                                return [
+                                  ...prev,
+                                  `${grade}-${dayIndex + 1}-${timeKey}`,
+                                ];
+                              } else if (!e.target.checked) {
+                                const newArray = prev.filter(
+                                  (item) =>
+                                    item !==
+                                    `${grade}-${dayIndex + 1}-${timeKey}`
+                                );
+                                return newArray;
+                              }
+                            })
+                          }
+                        />
                         <div className="rounded-lg w-full">
                           {data[grade][dayIndex + 1][timeKey] && (
                             <div className="ps-3">
@@ -51,7 +124,11 @@ function SchedulerTable({ data }) {
                                     .code
                                 }
                               </code>
-                              )
+                              ) [
+                              <code className="font-mono">
+                                {data[grade][dayIndex + 1][timeKey].class.code}
+                              </code>
+                              ]
                               <div className="font-normal text-gray-500">
                                 {` ${
                                   data[grade][dayIndex + 1][timeKey].lecturer
@@ -63,21 +140,18 @@ function SchedulerTable({ data }) {
                               </div>
                             </div>
                           )}
-                          {data[grade][dayIndex + 1][timeKey] ? (
+                          {data[grade][dayIndex + 1][timeKey] && (
                             <Image
                               src={"/images/delete.png"}
                               className="float-end cursor-pointer"
                               width={32}
                               height={32}
                               alt="delete"
-                            />
-                          ) : (
-                            <Image
-                              className="float-end cursor-pointer hidden group-hover:block"
-                              src={"/images/add.png"}
-                              width={32}
-                              height={32}
-                              alt="add"
+                              onClick={(e) =>
+                                deleteGivenSubject(
+                                  data[grade][dayIndex + 1][timeKey]._id
+                                )
+                              }
                             />
                           )}
                         </div>
@@ -90,6 +164,21 @@ function SchedulerTable({ data }) {
           </tbody>
         ))}
       </table>
+      <div className="absolute -right-56 top-60">
+        <NewSubjectForm
+          startTime={selectedTimes.startTime}
+          endTime={selectedTimes.endTime}
+          grade={selectedGrade}
+          day={selectedDay}
+        />
+      </div>
+      <Snackbar
+        anchorOrigin={{vertical:'bottom',horizontal:'right'}}
+        open={openSnackbar}
+        autoHideDuration={6000}
+        onClose={handleClose}
+        message="Ders Silindi. Sayfayı yenileyin..."
+      />
     </div>
   );
 }
