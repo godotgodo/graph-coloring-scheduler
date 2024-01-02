@@ -31,21 +31,21 @@ function SubjectTab() {
     const body = {
       id: id,
     };
-    const resDelete = await fetch("http://localhost:3000/api/subject", {
+    const resDelete = await fetch("/api/subject", {
       method: "DELETE",
       body: JSON.stringify(body),
     });
     fetchSubjects();
   };
   const fetchLecturers = async () => {
-    const resLecturers = await fetch("http://localhost:3000/api/lecturer", {
+    const resLecturers = await fetch("/api/lecturer", {
       cache: "no-cache",
     });
     const lecturers = await resLecturers.json();
     setLecturers(lecturers);
   };
   const fetchSubjects = async () => {
-    const resSubjects = await fetch("http://localhost:3000/api/subject", {
+    const resSubjects = await fetch("/api/subject", {
       cache: "no-cache",
     });
     const subjects = await resSubjects.json();
@@ -58,7 +58,7 @@ function SubjectTab() {
       code: newSubjectCode,
       lecturer: selectedLecturer,
     };
-    const resNewSubject = await fetch("http://localhost:3000/api/subject", {
+    const resNewSubject = await fetch("/api/subject", {
       method: "POST",
       body: JSON.stringify(body),
     });

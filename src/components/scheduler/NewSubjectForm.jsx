@@ -12,6 +12,8 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import { useEffect } from "react";
+import getGivenSubjects from "@/app/actions";
+import { Days, Times } from "@/utils/settings";
 
 export default function MultiActionAreaCard({
   grade,
@@ -54,12 +56,12 @@ export default function MultiActionAreaCard({
       method: "POST",
       body: JSON.stringify(body),
     });
-    const result=await res.json();
+    const result = await res.json();
     if (result?.isAdded) {
-      handleOpen("Ders Eklendi, sayfayı yenileyin.");
-    }
-    else{
-      handleOpen(result.message)
+      handleOpen("Ders Eklendi.");
+      getGivenSubjects();
+    } else {
+      handleOpen(result.message);
     }
   };
 
@@ -89,10 +91,10 @@ export default function MultiActionAreaCard({
             Grade:{grade}
           </Typography>
           <Typography gutterBottom variant="h6" component="div">
-            Day:{day}
+            Day:{ Days[day]}
           </Typography>
           <Typography gutterBottom variant="h6" component="div">
-            StartTime-EndTime:{startTime}-{endTime}
+            StartTime-EndTime:{Times[startTime]}-{Times[endTime]}
           </Typography>
           <Select
             labelId="select-subject"

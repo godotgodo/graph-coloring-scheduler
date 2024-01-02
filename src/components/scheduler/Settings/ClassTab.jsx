@@ -18,14 +18,14 @@ function ClassTab() {
     fetchClasses();
   }, []);
   const fetchClasses = async () => {
-    const resClasses = await fetch("http://localhost:3000/api/class");
+    const resClasses = await fetch("/api/class");
     setClasses(await resClasses.json());
   };
   const saveNewClass = async () => {
     const body = {
       code: newClassCode,
     };
-    const resNewClass = await fetch("http://localhost:3000/api/class", {
+    const resNewClass = await fetch("/api/class", {
       method: "POST",
       body: JSON.stringify(body),
     });
@@ -35,7 +35,7 @@ function ClassTab() {
     const body = {
       id: id,
     };
-    const resDeleteClass = await fetch("http://localhost:3000/api/class", {
+    const resDeleteClass = await fetch("/api/class", {
       method: "DELETE",
       body: JSON.stringify(body),
     });
