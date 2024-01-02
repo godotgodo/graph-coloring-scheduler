@@ -2,8 +2,8 @@ import SchedulerContainer from "@/components/scheduler/SchedulerContainer";
 import React from "react";
 
 export async function getData() {
-  const res = await fetch("http://localhost:3000/api/givenSubject",{
-    cache:"no-cache"
+  const res = await fetch(`${process.env.API_URL}/givenSubject`, {
+    next: { tags: ["getGivenSubjects"] },
   });
   if (!res.ok) {
     throw new Error("Failed fetch to data");

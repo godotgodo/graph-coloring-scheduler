@@ -23,14 +23,14 @@ export default function LecturerTab() {
       name: newLecturerName,
       surname: newLecturerSurname,
     };
-    const res = await fetch("http://localhost:3000/api/lecturer", {
+    const res = await fetch("/api/lecturer", {
       method: "POST",
       body: JSON.stringify(newLecturer),
     });
     fetchLecturers();
   };
   const fetchLecturers = async () => {
-    const resLecturers = await fetch("http://localhost:3000/api/lecturer", {
+    const resLecturers = await fetch("/api/lecturer", {
       cache: "no-cache",
     });
     const lecturers = await resLecturers.json();
@@ -40,7 +40,7 @@ export default function LecturerTab() {
     const body = {
       id: id,
     };
-    const resDelete = await fetch("http://localhost:3000/api/lecturer", {
+    const resDelete = await fetch("/api/lecturer", {
       method: "DELETE",
       body: JSON.stringify(body),
     });

@@ -6,6 +6,7 @@ import { Checkbox, MenuItem, Select, Snackbar } from "@mui/material";
 import { useState } from "react";
 import { useEffect } from "react";
 import NewSubjectForm from "./NewSubjectForm";
+import getGivenSubjects from "@/app/actions";
 
 function SchedulerTable({ data }) {
   const [checkedIndexes, setCheckedIndexes] = useState([]);
@@ -56,6 +57,7 @@ function SchedulerTable({ data }) {
       body: JSON.stringify(body),
     });
     setOpenSnackbar(true);
+    getGivenSubjects();
   };
   return (
     <div className="relative w-full shadow-md sm:rounded-lg">
@@ -72,6 +74,9 @@ function SchedulerTable({ data }) {
         </thead>
         {Days.map((day, dayIndex) => (
           <tbody key={day} className="relative mb-5 border-b-8">
+            <div className="absolute left">
+
+            </div>
             {Object.keys(Times).map((timeKey, timeIndex) => {
               if (timeKey != 17) {
                 return (
@@ -177,7 +182,7 @@ function SchedulerTable({ data }) {
         open={openSnackbar}
         autoHideDuration={6000}
         onClose={handleClose}
-        message="Ders Silindi. Sayfayı yenileyin..."
+        message="Ders Silindi."
       />
     </div>
   );
