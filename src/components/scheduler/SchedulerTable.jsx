@@ -28,6 +28,7 @@ function SchedulerTable({ data }) {
   const [selectedGrade, setSelectedGrade] = useState(0);
   const [selectedDay, setselectedDay] = useState(0);
   useEffect(() => {
+    console.log(checkedIndexes);
     if (checkedIndexes.length > 0) {
       setSelectedTimes({
         startTime: Number(checkedIndexes[0].split("-")[2]),
@@ -36,11 +37,6 @@ function SchedulerTable({ data }) {
       });
       setSelectedGrade(checkedIndexes[0].split("-")[0]);
       setselectedDay(checkedIndexes[0].split("-")[1]);
-      let visibleCheckboxes = [];
-      for (let i = 1; i <= 9; i++) {
-        visibleCheckboxes.push(`1-1-${i + 8}`);
-      }
-      setVisibleCheckboxes(visibleCheckboxes);
     } else {
       setSelectedTimes({
         startTime: 0,
@@ -48,6 +44,7 @@ function SchedulerTable({ data }) {
       });
     }
   }, [checkedIndexes]);
+  const clearSelectedCheckboxes=()=>setCheckedIndexes([]);
   const deleteGivenSubject = async (id) => {
     const body = {
       id: id,
@@ -90,6 +87,7 @@ function SchedulerTable({ data }) {
                     {Grades.map((grade) => (
                       <td className="group px-6 py-4" key={grade}>
                         <Checkbox
+                          checked={checkedIndexes.includes(`${grade}-${dayIndex+1}-${timeKey}`) }
                           onChange={(e) =>
                             setCheckedIndexes((prev) => {
                               if (
@@ -175,6 +173,7 @@ function SchedulerTable({ data }) {
           endTime={selectedTimes.endTime}
           grade={selectedGrade}
           day={selectedDay}
+          clearSelectedCheckboxes={clearSelectedCheckboxes}
         />
       </div>
       <Snackbar

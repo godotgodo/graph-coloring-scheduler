@@ -20,6 +20,7 @@ export default function MultiActionAreaCard({
   day,
   startTime,
   endTime,
+  clearSelectedCheckboxes
 }) {
   const [selectedSubject, setSelectedSubject] = useState({});
   const [subjects, setSubjects] = useState([]);
@@ -63,6 +64,7 @@ export default function MultiActionAreaCard({
     } else {
       handleOpen(result.message);
     }
+    clearSelectedCheckboxes();
   };
 
   const fetchSubjects = async () => {
