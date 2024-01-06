@@ -24,8 +24,6 @@ export default function MultiActionAreaCard({
 }) {
   const [selectedSubject, setSelectedSubject] = useState({});
   const [subjects, setSubjects] = useState([]);
-  const [classes, setClasses] = useState([]);
-  const [selectedClass, setSelectedClass] = useState({});
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const handleOpen = (message) => {
@@ -42,7 +40,6 @@ export default function MultiActionAreaCard({
 
   useEffect(() => {
     fetchSubjects();
-    fetchClasses();
   }, [grade]);
 
   const saveNewGivenSubject = async () => {
@@ -51,7 +48,6 @@ export default function MultiActionAreaCard({
       startTime: startTime,
       endTime: endTime,
       subject: selectedSubject._id,
-      class: selectedClass,
     };
     const res = await fetch("/api/givenSubject", {
       method: "POST",
@@ -77,13 +73,6 @@ export default function MultiActionAreaCard({
     } else {
       setSubjects(subjects);
     }
-  };
-  const fetchClasses = async () => {
-    const resClasses = await fetch("http://localhost:3000/api/class", {
-      cache: "no-cache",
-    });
-    const classes = await resClasses.json();
-    setClasses(classes);
   };
   return (
     <Card sx={{ maxWidth: 400 }}>
@@ -118,30 +107,6 @@ export default function MultiActionAreaCard({
                 disablePadding
               >
                 {subject.name}
-              </MenuItem>
-            ))}
-          </Select>
-          <Select
-            labelId="select-class"
-            id="select-class"
-            value={selectedClass._id}
-            label="Class"
-            placeholder="Select Class"
-            className="w-full mt-2"
-            onChange={(e) =>
-              setSelectedClass(
-                classes.find((item) => item._id === e.target.value)
-              )
-            }
-          >
-            {classes.map((_class) => (
-              <MenuItem
-                className="w-1/2"
-                key={_class._id}
-                value={_class._id}
-                disablePadding
-              >
-                {_class.code}
               </MenuItem>
             ))}
           </Select>
