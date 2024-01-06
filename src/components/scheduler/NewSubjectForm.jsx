@@ -44,7 +44,7 @@ export default function MultiActionAreaCard({
 
   const saveNewGivenSubject = async () => {
     const body = {
-      day: day,
+      day: Number(day),
       startTime: startTime,
       endTime: endTime,
       subject: selectedSubject._id,

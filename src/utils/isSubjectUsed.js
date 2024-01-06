@@ -42,7 +42,7 @@ const isSubjectUsed = (data = {}, givenSubjects = []) => {
     return false;
   }
   givenSubjects.forEach((givenSubject) => {
-    if (givenSubject.day === data.day) {
+    if (givenSubject.day == data.day) {
       if (givenSubject.startTime <= data.startTime) {
         smaller = givenSubject;
         bigger = data;
